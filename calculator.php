@@ -1,10 +1,12 @@
 <?php
+    session_start();
+    // echo $_SESSION["uid"]. "You re on the right path";
     if (isset($_POST['calculate'])){
         $_num1 = (int)$_POST['num1'];
         $_num2 = (int)$_POST['num2'];
         $_operator = $_POST['operator'] ;
         $_ans;
-    if (((is_numeric($_POST['num1']) && is_numeric($_POST['num2']))) && ($_POST['num2'] != 0)){
+    if ((is_numeric($_POST['num1']) && is_numeric($_POST['num2']))){
         if ($_operator == "+"){
             $_ans = "<h1> The sum of ".$_num1." and ".$_num2." is: ". ($_num1 + $_num2) . "</h2>\n";
         }elseif($_operator == "-"){
@@ -12,10 +14,12 @@
         }elseif($_operator == "*"){
             $_ans = "<h1> The multiple of ".$_num1." and ".$_num2." is: ". ($_num1 * $_num2) ."</h2>\n";
         }else{
-            $_ans = "<h1> The division of ".$_num1. " and ".$_num2." is: ". ($_num1 / $_num2)."</h2>\n";
+            if($_POST['num2'] == 0){
+                $_ans = "<h1> The division of ".$_num1. " and ".$_num2." is: E </h2>\n";
+            }else{
+                $_ans = "<h1> The division of ".$_num1. " and ".$_num2." is: ". ($_num1 / $_num2)."</h2>\n";
+            }
         }
-    }elseif($_POST['num2'] == 0){
-        $_ans = "<h1> The division of ".$_num1. " and ".$_num2." is: E </h2>\n";
     }else{
         $_ans = "<h1 class='error'>Invalid input</h1> ";
     }
@@ -29,12 +33,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
+    <?php 
+        if ($_SESSION["mode"] == "light"){ ?>
     <link rel='stylesheet' href='calculator.css'>
+    <?php 
+        }else {?>
+    <link rel='stylesheet' href='dark.css'>
+    <?php 
+    }
+    ?>
 </head>
 <body>
 <div class="container">
     <form method='POST' action="calculator.php">
         <h1>CALCULATOR</h1>
+        <?php
+        echo $_SESSION["uid"]. ",You re on the right path<br>";
+        ?>
         First Number<input type="text" name='num1' value='<?php echo isset($_POST['num1']) ? $_POST['num1'] : "" ; ?>'>
         Operator<select for='operator' name='operator' >
         <option value=''><?php echo isset($_POST['operator']) ? $_POST['operator'] : ""; ?></option>
